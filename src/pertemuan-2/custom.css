@@ -1,0 +1,106 @@
+/* =========================================
+   TEMA: KAWAII / CUTE BUBBLY (VERSI RAPI)
+   ========================================= */
+
+/* 1. Reset Dasar (Agar super rapi dan presisi) */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* 2. Styling Keseluruhan (Background Gulali) */
+body {
+    font-family: 'Quicksand', 'Nunito', sans-serif;
+    background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh;
+    padding: 20px;
+    overflow-x: hidden;
+}
+
+/* 3. Container Utama (Kertas Memo Lucu) */
+.card {
+    background: #ffffff;
+    max-width: 450px; /* Ukuran pas, tidak terlalu lebar */
+    width: 100%;
+    padding: 40px 30px;
+    border-radius: 30px;
+    border: 3px dashed #ffb7b2; /* Garis putus-putus manis */
+    box-shadow: 0 10px 25px rgba(255, 183, 178, 0.4);
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Efek melayang sedikit */
+}
+
+/* Pita Gemas di Atas Card */
+.card::before {
+    content: '🎀';
+    font-size: 40px;
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 4. BAGIAN TANGGAL (Baru Ditambahkan!) */
+.tanggal {
+    display: inline-block;
+    background: #ff9a9e; /* Warna pink permen */
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 6px 16px;
+    border-radius: 20px; /* Berbentuk pil */
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 8px rgba(255, 154, 158, 0.3);
+}
+
+/* 5. Header Utama */
+h1 {
+    color: #ff7eb3;
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #ffe6fa; /* Efek teks gendut */
+}
+
+/* 6. Paragraf */
+p {
+    color: #7a6b73; /* Warna debu ungu agar lembut di mata */
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+/* 7. Garis Pemisah (Deretan Emoji) */
+hr {
+    border: none;
+    margin: 20px 0;
+    text-align: center;
+}
+
+hr::after {
+    content: '✨ 🌸 🧸 🌸 ✨';
+    font-size: 18px;
+    letter-spacing: 8px; /* Jarak antar emoji */
+}
+
+/* 8. Greeting (Label Bawah) */
+small {
+    display: inline-block;
+    background: #ffecd2;
+    color: #ff7e67;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
+}
