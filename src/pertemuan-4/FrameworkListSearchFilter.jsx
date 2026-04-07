@@ -2,28 +2,40 @@ import { useState } from "react";
 import frameworkData from "./framework.json";
 
 export default function FrameworkListSearchFilter() {
-  /** 1. Deklarasi State **/
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
+  /** 1. Inisialisasi State dalam bentuk Objek **/
+  const [dataForm, setDataForm] = useState({
+    searchTerm: "",
+    selectedTag: "",
+  });
 
-  /** 2. Ambil Unique Tags secara otomatis **/
+  /** 2. Function handleChange untuk menangani perubahan input **/
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDataForm({
+      ...dataForm, // Menyalin data lama
+      [name]: value, // Mengupdate field berdasarkan atribut 'name' pada input
+    });
+  };
+
+  /** 3. Ambil Unique Tags secara otomatis **/
   const allTags = [...new Set(frameworkData.flatMap((item) => item.tags))];
 
-  /** 3. Logic Search & Filter **/
-  const _searchTerm = searchTerm.toLowerCase();
+  /** 4. Logic Search & Filter (Menggunakan dataForm) **/
+  const _searchTerm = dataForm.searchTerm.toLowerCase();
   const filteredFrameworks = frameworkData.filter((framework) => {
     const matchesSearch =
       framework.name.toLowerCase().includes(_searchTerm) ||
       framework.description.toLowerCase().includes(_searchTerm) ||
       framework.details.developer.toLowerCase().includes(_searchTerm) ||
       framework.details.releaseYear.toString().includes(_searchTerm);
-    const matchesTag = selectedTag
-      ? framework.tags.includes(selectedTag)
+
+    const matchesTag = dataForm.selectedTag
+      ? framework.tags.includes(dataForm.selectedTag)
       : true;
+
     return matchesSearch && matchesTag;
   });
 
-  // Array warna untuk variasi kartu
   const colors = [
     "from-blue-500/10 to-indigo-500/10 border-blue-200",
     "from-emerald-500/10 to-teal-500/10 border-emerald-200",
@@ -46,21 +58,21 @@ export default function FrameworkListSearchFilter() {
           </p>
         </header>
 
-        {/* --- Bagian Search & Filter (Gaya Modern) --- */}
+        {/* --- Bagian Search & Filter --- */}
         <div className="flex flex-col gap-4 mb-12 max-w-2xl mx-auto">
           <input
             type="text"
-            name="searchTerm"
+            name="searchTerm" // Name harus sama dengan key di dataForm
             placeholder="Search framework..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={dataForm.searchTerm}
+            onChange={handleChange}
             className="w-full p-4 rounded-2xl border-2 border-white bg-white/50 backdrop-blur-sm shadow-sm focus:border-blue-400 focus:ring-0 outline-none transition-all placeholder:text-slate-400 text-slate-700"
           />
 
           <select
-            name="selectedTag"
-            value={selectedTag}
-            onChange={(e) => setSelectedTag(e.target.value)}
+            name="selectedTag" // Name harus sama dengan key di dataForm
+            value={dataForm.selectedTag}
+            onChange={handleChange}
             className="w-full p-4 rounded-2xl border-2 border-white bg-white/50 backdrop-blur-sm shadow-sm focus:border-blue-400 outline-none transition-all text-slate-600 cursor-pointer appearance-none"
           >
             <option value="">All Tags</option>
@@ -78,13 +90,11 @@ export default function FrameworkListSearchFilter() {
             filteredFrameworks.map((item, index) => (
               <div
                 key={item.id}
-                className={`group relative overflow-hidden bg-gradient-to-br ${colors[index % colors.length]} 
-                           border-2 p-8 rounded-[2rem] transition-all duration-500 
-                           hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-200/50 bg-white`}
+                className={`group relative overflow-hidden bg-gradient-to-br ${
+                  colors[index % colors.length]
+                } border-2 p-8 rounded-[2rem] transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-indigo-200/50 bg-white`}
               >
-                {/* Dekorasi lingkaran blur */}
                 <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/40 rounded-full blur-2xl group-hover:bg-white/60 transition-all"></div>
-
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-6">
                     <div>
@@ -99,27 +109,23 @@ export default function FrameworkListSearchFilter() {
                       <span className="text-xl">🚀</span>
                     </div>
                   </div>
-
                   <p className="text-slate-600 leading-relaxed mb-6 font-medium text-sm md:text-base">
                     {item.description}
                   </p>
-
                   <div className="flex flex-wrap gap-2 mb-8">
                     {item.tags.map((tag, i) => (
                       <span
                         key={i}
-                        className={`backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-sm border transition-all
-                          ${
-                            selectedTag === tag
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-white/80 text-slate-700 border-slate-100"
-                          }`}
+                        className={`backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold shadow-sm border transition-all ${
+                          dataForm.selectedTag === tag
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "bg-white/80 text-slate-700 border-slate-100"
+                        }`}
                       >
                         #{tag}
                       </span>
                     ))}
                   </div>
-
                   <div className="flex items-center justify-between pt-6 border-t border-slate-200/50">
                     <span className="text-sm font-bold text-slate-500">
                       By {item.details.developer}
@@ -156,10 +162,9 @@ export default function FrameworkListSearchFilter() {
                 No framework matches your search.
               </p>
               <button
-                onClick={() => {
-                  setSearchTerm("");
-                  setSelectedTag("");
-                }}
+                onClick={() =>
+                  setDataForm({ searchTerm: "", selectedTag: "" })
+                }
                 className="mt-4 text-blue-600 font-bold hover:underline"
               >
                 Clear all filters
