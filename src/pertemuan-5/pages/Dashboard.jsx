@@ -1,59 +1,67 @@
-import { FaShoppingCart, FaTruck, FaBan, FaDollarSign } from "react-icons/fa";
+import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaArrowUp, FaArrowDown } from "react-icons/fa";
 import PageHeader from "../components/PageHeader";
 
 export default function Dashboard() {
+    const stats = [
+        { id: "orders", label: "Total Orders", value: "75", icon: <FaShoppingCart />, color: "bg-emerald-500", trend: "+4%", up: true },
+        { id: "delivered", label: "Total Delivered", value: "357", icon: <FaTruck />, color: "bg-emerald-500", trend: "+4%", up: true },
+        { id: "canceled", label: "Total Canceled", value: "65", icon: <FaBan />, color: "bg-red-500", trend: "-25%", up: false },
+        { id: "revenue", label: "Total Revenue", value: "$128", icon: <FaDollarSign />, color: "bg-emerald-500", trend: "-12%", up: false },
+    ];
+
     return (
-        <div id="dashboard-container">
-            {/* 2️⃣ Memanggil Komponen PageHeader */}
+        <div id="dashboard-container" className="bg-[#F8F9FB] min-h-screen">
+            {/* Page Header */}
             <PageHeader />
 
-            {/* 3️⃣ Grid Container */}
-            <div id="dashboard-grid" className="p-5 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-                
-                {/* Card 1: Total Orders */}
-                <div id="dashboard-orders" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="orders-icon" className="bg-hijau rounded-full p-4 text-3xl text-white">
-                        <FaShoppingCart />
-                    </div>
-                    <div id="orders-info" className="flex flex-col">
-                        <span id="orders-count" className="text-2xl font-bold font-poppins">75</span>
-                        <span id="orders-text" className="text-gray-400 font-barlow">Total Orders</span>
-                    </div>
+            <div className="p-6">
+                {/* Welcome Message */}
+                <div className="mb-8">
+                    <h1 className="text-3xl font-bold text-gray-800 font-poppins">Dashboard</h1>
+                    <p className="text-gray-400 font-barlow">Hi, Samantha. Welcome back to Sedap Admin!</p>
                 </div>
 
-                {/* Card 2: Total Delivered */}
-                <div id="dashboard-delivered" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="delivered-icon" className="bg-hijau rounded-full p-4 text-3xl text-white">
-                        <FaTruck />
-                    </div>
-                    <div id="delivered-info" className="flex flex-col">
-                        <span id="delivered-count" className="text-2xl font-bold font-poppins">175</span>
-                        <span id="delivered-text" className="text-gray-400 font-barlow">Total Delivered</span>
-                    </div>
+                {/* Grid Cards */}
+                <div id="dashboard-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {stats.map((item) => (
+                        <div 
+                            key={item.id} 
+                            className="group bg-white rounded-2xl p-6 shadow-sm hover:shadow-xl transition-all duration-300 border border-transparent hover:border-emerald-100 flex items-center justify-between cursor-pointer"
+                        >
+                            <div className="flex items-center space-x-4">
+                                {/* Icon Container with Glow Effect */}
+                                <div className={`${item.color} w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg shadow-${item.color}/20 group-hover:scale-110 transition-transform`}>
+                                    {item.icon}
+                                </div>
+                                
+                                <div>
+                                    <h3 className="text-3xl font-extrabold text-gray-800 font-poppins tracking-tight">
+                                        {item.value}
+                                    </h3>
+                                    <p className="text-gray-400 font-medium font-barlow text-sm">
+                                        {item.label}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Trend Indicator (Kecil di pojok) */}
+                            <div className={`flex items-center space-x-1 text-xs font-bold ${item.up ? 'text-emerald-500' : 'text-red-400'}`}>
+                                {item.up ? <FaArrowUp /> : <FaArrowDown />}
+                                <span>{item.trend} (30 days)</span>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
-                {/* Card 3: Total Canceled */}
-                <div id="dashboard-canceled" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="canceled-icon" className="bg-red-500 rounded-full p-4 text-3xl text-white">
-                        <FaBan />
+                {/* Placeholder untuk Chart (Meniru Gambar) */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10">
+                    <div className="bg-white p-6 rounded-2xl shadow-sm h-64 flex items-center justify-center border border-gray-100">
+                        <p className="text-gray-300 italic">Pie Chart Placeholder</p>
                     </div>
-                    <div id="canceled-info" className="flex flex-col">
-                        <span id="canceled-count" className="text-2xl font-bold font-poppins">40</span>
-                        <span id="canceled-text" className="text-gray-400 font-barlow">Total Canceled</span>
-                    </div>
-                </div>
-
-                {/* Card 4: Total Revenue */}
-                <div id="dashboard-revenue" className="flex items-center space-x-5 bg-white rounded-lg shadow-md p-4">
-                    <div id="revenue-icon" className="bg-blue-500 rounded-full p-4 text-3xl text-white">
-                        <FaDollarSign />
-                    </div>
-                    <div id="revenue-info" className="flex flex-col">
-                        <span id="revenue-amount" className="text-2xl font-bold font-poppins">Rp.128</span>
-                        <span id="revenue-text" className="text-gray-400 font-barlow">Total Revenue</span>
+                    <div className="bg-white p-6 rounded-2xl shadow-sm h-64 flex items-center justify-center border border-gray-100">
+                        <p className="text-gray-300 italic">Chart Order Placeholder</p>
                     </div>
                 </div>
-
             </div>
         </div>
     );

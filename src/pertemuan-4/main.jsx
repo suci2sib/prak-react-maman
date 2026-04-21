@@ -7,5 +7,6 @@ import "./tailwind.css";
 createRoot(document.getElementById("root")).render(
   <div>
     <ResponsiveDesign/>
+    <FrameworkListSearchFilter/>
   </div>
 );

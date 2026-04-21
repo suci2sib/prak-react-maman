@@ -1,17 +1,15 @@
-import { useState } from "react"; // 1. Import useState
-import { MdDashboard, MdListAlt, MdPeople, MdRestaurant, MdInsertChart, MdChat, MdCalendarToday, MdCloudUpload } from "react-icons/md";
+import { useState } from "react";
+import { MdDashboard, MdListAlt, MdPeople, MdRestaurant, MdAdd } from "react-icons/md"; // Tambah MdAdd
 
 export default function Sidebar() {
-    // 2. State untuk menyimpan foto yang diupload
-    const [profileImage, setProfileImage] = useState("https://avatar.iran.liara.run/public/28");
+    // State profile tetap dipertahankan jika masih dibutuhkan, 
+    // tapi fungsi upload gambar dihapus karena tombolnya diganti.
+    const [profileImage] = useState("https://avatar.iran.liara.run/public/28");
 
-    // 3. Fungsi handle upload
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setProfileImage(imageUrl);
-        }
+    // Fungsi untuk tombol Add Menus
+    const handleAddMenus = () => {
+        alert("Navigasi ke halaman Tambah Menu atau buka Modal!");
+        // Di sini kamu bisa ganti dengan navigasi router: navigate('/add-menu')
     };
 
     return (
@@ -46,19 +44,16 @@ export default function Sidebar() {
                 <div id="footer-card" className="bg-hijau p-6 rounded-3xl shadow-lg flex flex-col items-center text-center relative overflow-hidden text-white">
                     <p className="text-sm font-barlow mb-4 z-10">Please organize your menus through button below!</p>
                     
-                    {/* 4. Tombol Upload Foto */}
-                    <label className="bg-white text-gray-800 px-6 py-2 rounded-xl font-bold text-sm z-10 shadow-md cursor-pointer hover:bg-gray-100 flex items-center space-x-2">
-                        <MdCloudUpload className="text-lg" />
-                        <span>Upload Photo</span>
-                        <input 
-                            type="file" 
-                            className="hidden" 
-                            accept="image/*" 
-                            onChange={handleImageChange} 
-                        />
-                    </label>
+                    {/* Perubahan: Tombol Add Menus */}
+                    <button 
+                        onClick={handleAddMenus}
+                        className="bg-white text-gray-800 px-6 py-2 rounded-xl font-bold text-sm z-10 shadow-md cursor-pointer hover:bg-gray-100 flex items-center space-x-2 transition-all active:scale-95"
+                    >
+                        <MdAdd className="text-lg" />
+                        <span>Add Menus</span>
+                    </button>
 
-                    {/* 5. Tampilan Foto (Berubah saat diupload) */}
+                    {/* Foto profile tetap ada sebagai dekorasi background */}
                     <img 
                         id="footer-avatar" 
                         src={profileImage} 
