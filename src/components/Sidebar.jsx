@@ -1,19 +1,19 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom"; 
+import { NavLink } from "react-router-dom";
 import {
   MdSpaceDashboard,
   MdListAlt,
   MdPeople,
   MdAdd,
-  MdErrorOutline, // Untuk Error 400
-  MdLockOutline,  // Untuk Error 401
-  MdBlock,        // Untuk Error 403
+  MdInventory,      // Icon baru untuk Products
+  MdErrorOutline,
+  MdLockOutline,
+  MdBlock,
 } from "react-icons/md";
 
 export default function Sidebar() {
   const [profileImage] = useState("https://avatar.iran.liara.run/public/28");
 
-  // Implementasi menuClass untuk Active State
   const menuClass = ({ isActive }) =>
     `flex cursor-pointer items-center rounded-xl p-4 space-x-2 transition-all
     ${isActive ? 
@@ -69,6 +69,14 @@ export default function Sidebar() {
             <NavLink id="menu-3" to="/customers" className={menuClass}>
               <MdPeople className="text-xl" />
               <span>Customer</span>
+            </NavLink>
+          </li>
+
+          {/* NavLink Produk Baru */}
+          <li>
+            <NavLink id="menu-products" to="/products" className={menuClass}>
+              <MdInventory className="text-xl" />
+              <span>Products</span>
             </NavLink>
           </li>
 
