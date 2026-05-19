@@ -1,131 +1,167 @@
-import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaArrowUp, FaArrowDown, FaCalendarAlt, FaChevronDown, FaDownload, FaEllipsisV } from "react-icons/fa";
+import { useState } from "react";
+import { FaShoppingCart, FaTruck, FaBan, FaDollarSign, FaEye } from "react-icons/fa";
+import PageHeader from "../components/PageHeader";
+import Card from "../components/Card";
+import Badge from "../components/Badge";
+import Table from "../components/Table";
+import Alert from "../components/Alert";
 
 export default function Dashboard() {
-    const stats = [
-        { id: "orders", label: "Total Orders", value: "75", icon: <FaShoppingCart />, color: "bg-emerald-500", trend: "4%", up: true },
-        { id: "delivered", label: "Total Delivered", value: "357", icon: <FaTruck />, color: "bg-emerald-500", trend: "4%", up: true },
-        { id: "canceled", label: "Total Canceled", value: "65", icon: <FaBan />, color: "bg-red-500", trend: "25%", up: false },
-        { id: "revenue", label: "Total Revenue", value: "$128", icon: <FaDollarSign />, color: "bg-emerald-500", trend: "12%", up: false },
+    const [filter, setFilter] = useState("All");
+
+    const recentOrders = [
+        { 
+            id: "#12341", name: "Rizky Ridho", menu: "Ayam Bakar", category: "Food", 
+            status: "Delivered", price: "Rp 25.000",
+            image: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=100&h=100&fit=crop" 
+        },
+        { 
+            id: "#12342", name: "Siti Aminah", menu: "Nasi Goreng", category: "Food", 
+            status: "Pending", price: "Rp 15.000",
+            image: "https://images.unsplash.com/photo-1603133872878-684f208fb84b?w=100&h=100&fit=crop"
+        },
+        { 
+            id: "#12343", name: "Budi Santoso", menu: "Es Teh Manis", category: "Drink", 
+            status: "Canceled", price: "Rp 5.000",
+            image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=100&h=100&fit=crop"
+        },
+        { 
+            id: "#12344", name: "Andi", menu: "Jus Jeruk", category: "Drink", 
+            status: "Delivered", price: "Rp 10.000",
+            image: "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=100&h=100&fit=crop"
+        },
     ];
 
-    return (
-        <div id="dashboard-container" className="bg-[#F8F9FB] min-h-screen font-barlow p-8">
-            
-            {/* --- 1. HEADER SECTION --- */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between mb-10">
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-800 font-poppins">Dashboard</h1>
-                    <p className="text-gray-400 mt-1">Hi, Samantha. Welcome back to Sedap Admin!</p>
-                </div>
-                
-                {/* Filter Periode Button (Perbaikan: Button Interaktif) */}
-                <button className="mt-4 md:mt-0 flex items-center bg-white px-5 py-3 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-all active:scale-95 group">
-                    <div className="bg-blue-100 p-2 rounded-lg text-blue-600 mr-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <FaCalendarAlt size={14} />
-                    </div>
-                    <div className="flex flex-col text-left mr-8">
-                        <span className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Filter Periode</span>
-                        <span className="text-sm font-bold text-gray-700">17 April 2020 - 21 May 2020</span>
-                    </div>
-                    <FaChevronDown className="text-gray-300 text-xs group-hover:text-blue-500 transition-colors" />
-                </button>
-            </div>
+    const filteredOrders = filter === "All" 
+        ? recentOrders 
+        : recentOrders.filter(order => order.category === filter);
 
-            {/* --- 2. STATS CARDS GRID --- */}
-            <div id="dashboard-grid" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                {stats.map((item) => (
-                    <div key={item.id} className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50 flex flex-col items-center text-center relative group hover:shadow-lg transition-all">
-                        {/* Icon dengan Lingkaran di Belakang Angka (Sesuai Referensi) */}
-                        <div className={`${item.color} w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl mb-4 shadow-xl shadow-emerald-100`}>
-                            {item.icon}
+    return (
+        <div id="dashboard-container" className="pb-10">
+            
+            <PageHeader title="Dashboard" breadcrumb={["Dashboard"]} />
+
+            {/* Grid Statistik */}
+            <div id="dashboard-grid" className="mb-5 grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <Card>
+                    <div className="flex items-center space-x-5">
+                        <div className="bg-green-500 rounded-full p-4 text-white shadow-lg shadow-green-100">
+                            <FaShoppingCart className="text-xl" />
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-4xl font-black text-gray-800 font-poppins">{item.value}</span>
-                            <span className="text-gray-400 font-medium text-sm mb-2">{item.label}</span>
-                            <div className={`flex items-center justify-center space-x-1 text-[11px] font-bold ${item.up ? 'text-emerald-500' : 'text-red-400'}`}>
-                                {item.up ? <FaArrowUp size={8} /> : <FaArrowDown size={8} />}
-                                <span>{item.trend} (30 days)</span>
-                            </div>
+                            <span className="text-2xl font-bold text-gray-800">75</span>
+                            <span className="text-gray-400 text-sm font-medium">Total Orders</span>
                         </div>
                     </div>
+                </Card>
+
+                <Card>
+                    <div className="flex items-center space-x-5">
+                        <div className="bg-blue-500 rounded-full p-4 text-white shadow-lg shadow-blue-100">
+                            <FaTruck className="text-xl" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-2xl font-bold text-gray-800">175</span>
+                            <span className="text-gray-400 text-sm font-medium">Total Delivered</span>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card>
+                    <div className="flex items-center space-x-5">
+                        <div className="bg-red-500 rounded-full p-4 text-white shadow-lg shadow-red-100">
+                            <FaBan className="text-xl" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-2xl font-bold text-gray-800">40</span>
+                            <span className="text-gray-400 text-sm font-medium">Total Canceled</span>
+                        </div>
+                    </div>
+                </Card>
+
+                <Card>
+                    <div className="flex items-center space-x-5">
+                        <div className="bg-yellow-400 rounded-full p-4 text-white shadow-lg shadow-yellow-100">
+                            <FaDollarSign className="text-xl" />
+                        </div>
+                        <div className="flex flex-col">
+                            <span className="text-2xl font-bold text-gray-800">Rp.128</span>
+                            <span className="text-gray-400 text-sm font-medium">Total Revenue</span>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Filter Buttons */}
+            <div className="mb-6 flex space-x-3">
+                {["All", "Food", "Drink"].map((cat) => (
+                    <button
+                        key={cat}
+                        onClick={() => setFilter(cat)}
+                        className={`px-5 py-2 rounded-lg font-bold transition-all text-sm border ${
+                            filter === cat 
+                            ? "bg-hijau text-white border-hijau shadow-md" 
+                            : "bg-white text-gray-400 border-gray-100 hover:bg-gray-50"
+                        }`}
+                    >
+                        {cat}
+                    </button>
                 ))}
             </div>
 
-            {/* --- 3. CHARTS SECTION --- */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                
-                {/* Pie Charts Group (5/12 width) */}
-                <div className="lg:col-span-5 bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50">
-                    <div className="flex justify-between items-center mb-8">
-                        <h2 className="text-xl font-bold text-gray-800">Pie Chart</h2>
-                        <FaEllipsisV className="text-gray-300 cursor-pointer" />
-                    </div>
-                    <div className="flex justify-around items-end h-48">
-                        {/* Circle 1 */}
-                        <div className="flex flex-col items-center">
-                            <div className="w-24 h-24 rounded-full border-[12px] border-emerald-500 border-l-red-100 flex items-center justify-center mb-4">
-                                <span className="font-bold text-sm">81%</span>
-                            </div>
-                            <span className="text-xs font-bold text-gray-500">Total Order</span>
-                        </div>
-                        {/* Circle 2 */}
-                        <div className="flex flex-col items-center">
-                            <div className="w-32 h-32 rounded-full border-[15px] border-emerald-500 border-b-emerald-100 flex items-center justify-center mb-4">
-                                <span className="font-bold text-lg">22%</span>
-                            </div>
-                            <span className="text-xs font-bold text-gray-500">Customer Growth</span>
-                        </div>
-                        {/* Circle 3 */}
-                        <div className="flex flex-col items-center">
-                            <div className="w-24 h-24 rounded-full border-[12px] border-blue-400 border-t-blue-100 flex items-center justify-center mb-4">
-                                <span className="font-bold text-sm">62%</span>
-                            </div>
-                            <span className="text-xs font-bold text-gray-500">Total Revenue</span>
-                        </div>
-                    </div>
+            {/* Tabel Pesanan Terbaru */}
+            <div className="bg-white rounded-2xl shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-xl font-bold text-gray-800">Recent Orders ({filter})</h2>
+                    {/* Mengembalikan tombol View All seperti desain asli */}
+                    <button className="text-hijau font-semibold hover:underline text-sm">View All</button>
                 </div>
 
-                {/* Chart Order Card (7/12 width) */}
-                <div className="lg:col-span-7 bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-50">
-                    <div className="flex justify-between items-center mb-6">
-                        <div>
-                            <h2 className="text-xl font-bold text-gray-800">Chart Order</h2>
-                            <p className="text-xs text-gray-400 mt-1">Lorem ipsum dolor sit amet, consectetur adip</p>
-                        </div>
-                        <button className="flex items-center space-x-2 border border-blue-500 text-blue-500 px-4 py-2 rounded-xl text-sm font-bold hover:bg-blue-50 transition-all active:scale-95">
-                            <FaDownload size={12} />
-                            <span>Save Report</span>
-                        </button>
-                    </div>
-                    
-                    {/* Area Chart SVG */}
-                    <div className="relative h-60 w-full">
-                        <svg viewBox="0 0 500 150" className="w-full h-full drop-shadow-xl">
-                            <defs>
-                                <linearGradient id="gradient" x1="0" x2="0" y1="0" y2="1">
-                                    <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.2"/>
-                                    <stop offset="100%" stopColor="#3B82F6" stopOpacity="0"/>
-                                </linearGradient>
-                            </defs>
-                            <path 
-                                fill="url(#gradient)" 
-                                d="M0,150 L0,120 C50,110 80,140 150,100 C220,60 280,120 350,80 C420,40 450,90 500,50 L500,150 Z" 
-                            />
-                            <path 
-                                fill="none" 
-                                stroke="#3B82F6" 
-                                strokeWidth="4" 
-                                strokeLinecap="round"
-                                d="M0,120 C50,110 80,140 150,100 C220,60 280,120 350,80 C420,40 450,90 500,50" 
-                            />
-                            <circle cx="350" cy="80" r="6" fill="white" stroke="#3B82F6" strokeWidth="3" />
-                        </svg>
-                        <div className="flex justify-between mt-6 text-[10px] text-gray-400 font-bold uppercase tracking-widest px-2">
-                            <span>Sunday</span><span>Monday</span><span>Tuesday</span><span>Wednesday</span><span>Thursday</span><span>Friday</span><span>Saturday</span>
-                        </div>
-                    </div>
-                </div>
-
+                {filteredOrders.length > 0 ? (
+                    <Table headers={["Order ID", "Menu", "Customer", "Status", "Price", "Action"]}>
+                        {filteredOrders.map((order, index) => (
+                            <tr key={index} className="hover:bg-gray-50 transition-colors">
+                                <td className="py-4 font-bold text-gray-700">{order.id}</td>
+                                
+                                <td className="py-4 flex items-center space-x-3">
+                                    <img 
+                                        src={order.image} 
+                                        alt={order.menu} 
+                                        className="w-10 h-10 rounded-lg object-cover shadow-sm"
+                                    />
+                                    <span className="font-semibold text-gray-800">{order.menu}</span>
+                                </td>
+                                
+                                {/* Avatar dihapus, dikembalikan ke teks biasa */}
+                                <td className="py-4 text-gray-600">{order.name}</td>
+                                
+                                <td className="py-4">
+                                    {/* Memastikan style Badge sesuai dengan gambar awal */}
+                                    <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${
+                                        order.status === 'Delivered' ? 'bg-green-100 text-green-600' :
+                                        order.status === 'Pending' ? 'bg-yellow-100 text-yellow-600' :
+                                        'bg-red-100 text-red-600'
+                                    }`}>
+                                        {order.status}
+                                    </span>
+                                </td>
+                                
+                                <td className="py-4 font-bold text-gray-900">{order.price}</td>
+                                
+                                <td className="py-4 text-center">
+                                    {/* Tombol aksi dikembalikan ke desain asli */}
+                                    <button className="p-2 bg-gray-50 rounded-lg text-hijau hover:bg-hijau hover:text-white transition-all shadow-sm">
+                                        <FaEye />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </Table>
+                ) : (
+                    <Alert type="info">
+                        Tidak ada pesanan untuk kategori "{filter}".
+                    </Alert>
+                )}
             </div>
         </div>
     );

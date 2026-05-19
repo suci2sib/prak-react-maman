@@ -79,6 +79,12 @@ export default function Sidebar() {
               <span>Products</span>
             </NavLink>
           </li>
+           <li>
+                    <NavLink to="/components" className={menuClass}>
+                            <MdInventory className="text-xl" />
+                            <span>Components</span>
+                        </NavLink>
+                    </li>
 
           {/* --- SECTION ERROR PAGES (LATIHAN) --- */}
           <div className="pt-6 mt-6 border-t border-gray-100">
