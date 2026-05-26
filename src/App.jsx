@@ -9,6 +9,7 @@ const Orders = React.lazy(() => import("./pages/Orders"));
 const Customers = React.lazy(() => import("./pages/Customers"));
 const Products = React.lazy(() => import("./pages/Products")); 
 const Components = React.lazy(() => import("./pages/Component")); 
+const FiturXyz = React.lazy(() => import("./pages/FiturXyz"));
 
 // 1️⃣ Import ProductDetail dengan React.lazy()
 const ProductDetail = React.lazy(() => import("./pages/ProductDetail")); 
@@ -31,7 +32,7 @@ function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/products" element={<Products />} />
           <Route path="/components" element={<Components />} />
-          
+          <Route path="/fitur-xyz" element={<FiturXyz />} />
 
           {/* 1️⃣ Route baru untuk detail produk dengan parameter :id */}
           <Route path="/products/:id" element={<ProductDetail />} /> 
