@@ -5,7 +5,9 @@ import {
   MdListAlt,
   MdPeople,
   MdAdd,
-  MdInventory, // Icon baru untuk Products
+  MdInventory,
+  MdExtension,      // Ikon baru untuk Components agar lebih rapi
+  MdDescription,    // Ikon baru khusus untuk Notes
   MdErrorOutline,
   MdLockOutline,
   MdBlock,
@@ -77,23 +79,32 @@ export default function Sidebar() {
             </NavLink>
           </li>
 
-          {/* NavLink Produk Baru */}
           <li>
             <NavLink id="menu-products" to="/products" className={menuClass}>
               <MdInventory className="text-xl" />
               <span>Products</span>
             </NavLink>
           </li>
+
           <li>
-            <NavLink to="/components" className={menuClass}>
-              <MdInventory className="text-xl" />
+            <NavLink id="menu-components" to="/components" className={menuClass}>
+              <MdExtension className="text-xl" />
               <span>Components</span>
             </NavLink>
           </li>
+
           <li>
-            <NavLink to="/fitur-xyz" className={menuClass}>
+            <NavLink id="menu-xyz" to="/fitur-xyz" className={menuClass}>
               <MdInventory className="text-xl" />
               <span>Fitur XYZ</span>
+            </NavLink>
+          </li>
+
+          {/* NavLink Notes yang sudah dirapikan */}
+          <li>
+            <NavLink id="menu-notes" to="/notes" className={menuClass}>
+              <MdDescription className="text-xl" />
+              <span>Notes</span>
             </NavLink>
           </li>
 
