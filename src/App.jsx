@@ -1,20 +1,20 @@
 import React, { Suspense } from "react";
 import "./assets/tailwind.css";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Loading from "./components/Loading";
+import ProtectedRoute from "./components/ProtectedRoute";
+import HomeRedirect from "./components/HomeRedirect";
 
-// Lazy Loading Imports
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
+const MemberDashboard = React.lazy(() => import("./pages/MemberDashboard"));
 const Orders = React.lazy(() => import("./pages/Orders"));
+const MemberOrders = React.lazy(() => import("./pages/MemberOrders"));
 const Customers = React.lazy(() => import("./pages/Customers"));
-const Products = React.lazy(() => import("./pages/Products")); 
-const Components = React.lazy(() => import("./pages/Component")); 
+const Products = React.lazy(() => import("./pages/Products"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+const Components = React.lazy(() => import("./pages/Component"));
 const FiturXyz = React.lazy(() => import("./pages/FiturXyz"));
-const Notes = React.lazy(() => import("./pages/Notes")); // 🆕 Import lazy untuk halaman Notes
-
-// 1️⃣ Import ProductDetail dengan React.lazy()
-const ProductDetail = React.lazy(() => import("./pages/ProductDetail")); 
-
+const Notes = React.lazy(() => import("./pages/Notes"));
 const ErrorPage = React.lazy(() => import("./pages/ErrorPage"));
 const MainLayout = React.lazy(() => import("./layouts/MainLayout"));
 const AuthLayout = React.lazy(() => import("./layouts/AuthLayout"));
@@ -26,44 +26,58 @@ function App() {
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
-        {/* Bungkus semua rute yang menggunakan Sidebar/Navbar dengan MainLayout */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/components" element={<Components />} />
-          <Route path="/fitur-xyz" element={<FiturXyz />} />
-          <Route path="/notes" element={<Notes />} /> {/* 🆕 Route baru untuk halaman Notes */}
+        <Route path="/" element={<HomeRedirect />} />
 
-          {/* 1️⃣ Route baru untuk detail produk dengan parameter :id */}
-          <Route path="/products/:id" element={<ProductDetail />} /> 
-
-          {/* Rute Error di dalam Layout */}
-          <Route 
-            path="/error-400" 
-            element={<ErrorPage code="400" title="Bad Request" description="Waduh, permintaan kamu tidak bisa kami proses nih." />} 
-          />
-          <Route 
-            path="/error-401" 
-            element={<ErrorPage code="401" title="Unauthorized" description="Ups! Kamu harus login dulu untuk masuk ke sini." />} 
-          />
-          <Route 
-            path="/error-403" 
-            element={<ErrorPage code="403" title="Forbidden" description="Maaf ya, kamu tidak punya akses ke halaman rahasia ini." />} 
-          />
+        <Route element={<ProtectedRoute role="admin" />}>
+          <Route path="/admin" element={<MainLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="products" element={<Products />} />
+            <Route path="products/:id" element={<ProductDetail />} />
+            <Route path="components" element={<Components />} />
+            <Route path="fitur-xyz" element={<FiturXyz />} />
+            <Route path="notes" element={<Notes />} />
+          </Route>
         </Route>
 
-        <Route element={<AuthLayout/>}>
+        <Route element={<ProtectedRoute role="member" />}>
+          <Route path="/member" element={<MainLayout />}>
+            <Route index element={<MemberDashboard />} />
+            <Route path="products" element={<Products />} />
+            <Route path="products/:id" element={<ProductDetail />} />
+            <Route path="orders" element={<MemberOrders />} />
+          </Route>
+        </Route>
+
+        <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register/>} />
-          <Route path="/forgot" element={<Forgot/>} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<Forgot />} />
         </Route>
 
-        {/* Fallback 404 */}
-        <Route 
-          path="*" 
-          element={<ErrorPage code="404" title="Page Not Found" description="Halaman yang kamu cari tidak ada di menu kami." />} 
+        <Route
+          path="/unauthorized"
+          element={
+            <ErrorPage
+              code="401"
+              title="Unauthorized"
+              description="Role akun kamu tidak memiliki akses ke halaman ini."
+            />
+          }
+        />
+        <Route path="/orders" element={<Navigate to="/" replace />} />
+        <Route path="/customers" element={<Navigate to="/" replace />} />
+        <Route path="/products/*" element={<Navigate to="/" replace />} />
+        <Route
+          path="*"
+          element={
+            <ErrorPage
+              code="404"
+              title="Page Not Found"
+              description="Halaman yang kamu cari tidak ada di menu kami."
+            />
+          }
         />
       </Routes>
     </Suspense>

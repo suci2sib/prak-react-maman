@@ -1,43 +1,42 @@
-import { useParams } from "react-router-dom"
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { supabase } from "../lib/supabase";
+import { formatCurrency } from "../lib/format";
 
 export default function ProductDetail() {
-    const { id } = useParams()
-    const [product, setProduct] = useState(null)
-    const [error, setError] = useState(null)
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [error, setError] = useState("");
 
-    useEffect(() => {
-        axios
-            .get(`https://dummyjson.com/products/${id}`)
-            .then((response) => {
-                if (response.status !== 200) {
-                    setError(response.message)
-                    return
-                }
-                setProduct(response.data)
-            })
-            .catch((err) => {
-                setError(err.message)
-            })
-    }, [id])
+  useEffect(() => {
+    const loadProduct = async () => {
+      const { data, error: productError } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", id)
+        .single();
 
-    if (error) return <div className="text-red-600 p-4">{error}</div>
-    if (!product) return <div className="p-4">Loading...</div>
+      if (productError) setError(productError.message);
+      else setProduct(data);
+    };
 
-    return (
-        <div className="p-6 bg-white rounded-xl shadow-lg max-w-lg mx-auto mt-6">
-            <img
-                src={product.thumbnail}
-                alt={product.title}
-                className="rounded-xl mb-4 w-full h-48 object-cover"
-            />
-            <h2 className="text-2xl font-bold mb-2">{product.title}</h2>
-            <p className="text-gray-600 mb-1">Kategori: {product.category}</p>
-            <p className="text-gray-600 mb-1">Brand: {product.brand}</p>
-            <p className="text-gray-800 font-semibold text-lg">
-                Harga: Rp {product.price * 1000}
-            </p>
-        </div>
-    )
+    loadProduct();
+  }, [id]);
+
+  if (error) return <div className="text-red-600 p-4">{error}</div>;
+  if (!product) return <LoadingSpinner text="Memuat produk..." />;
+
+  return (
+    <div className="p-6 bg-white rounded-xl shadow-lg max-w-lg mx-auto mt-6">
+      <div className="rounded-xl mb-4 w-full h-48 bg-green-50 flex items-center justify-center text-hijau text-6xl font-black">
+        {product.name.charAt(0)}
+      </div>
+      <h2 className="text-2xl font-bold mb-2">{product.name}</h2>
+      <p className="text-gray-600 mb-1">Stock: {product.stock}</p>
+      <p className="text-gray-800 font-semibold text-lg">
+        Harga: {formatCurrency(product.price)}
+      </p>
+    </div>
+  );
 }
